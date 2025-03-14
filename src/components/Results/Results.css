@@ -1,12 +1,56 @@
+.no-result {
+  text-align: center;
+}
+
 .results-section {
-  background-color: var(--color-primary);
-  color: var(--color-text);
+  background-color: var(--color-slate-900);
+  color: var(--color-slate-300);
 }
 
-@media screen and (min-width: 360px) {
-
+.results-description {
+  margin-bottom: 20px;
 }
 
-@media screen and (min-width: 360px) {
+h2.heading-text {
+  color: var(--color-white);
+}
 
+.result-container.lime-bg {
+  background-color: var(--color-lime);
+  border-radius: 11px;
+  margin-bottom: -26px;
+}
+
+.result-container {
+  background-color: var(--color-slate-950);
+  border-radius: 7px;
+  padding: 15px;
+}
+
+.payment-container:last-of-type {
+  border-top: var(--color-slate-700) 1px solid;
+
+  .payment-text {
+    margin-top: 15px;
+  }
+}
+
+.payment-text {
+  margin: 5px 0;
+}
+
+.payment-amount {
+  font-weight: var(--font-bold);
+  margin: 10px 0;
+}
+
+.payment-amount.monthly {
+  font-size: 2rem;
+  color: var(--color-lime);
+  margin-bottom: 15px;
+}
+
+.payment-amount.total {
+  font-size: 1.5rem;
+  color: var(--color-white);
 }

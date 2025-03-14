@@ -1,25 +1,33 @@
 .App {
-  height: 100vh;
+  min-height: calc(
+    100vh - 40px
+  ); /* 40px is the height of the padding top & bottom */
   font-size: var(--font-size);
   text-align: left;
 }
 
-.calculate-button {
-  color: var(--color-primary)
+.App .heading-text {
+  font-size: 1.25rem;
+  margin: 0;
 }
 
 .attribution {
-  font-size: .75rem;
+  font-size: 0.75rem;
+  margin: 10px 0;
 }
 
-@media screen and (min-width: 360px) {
+@media screen and (max-width: 375px) {
   .App {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-  }
 
-  .App section {
-    padding: 20px;
+    section {
+      padding: 30px 20px;
+
+      &:last-of-type {
+        padding-bottom: 0;
+      }
+    }
   }
 }

@@ -1,0 +1,23 @@
+.input-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-label {
+  color: var(--color-slate-700);
+  margin-bottom: 10px;
+}
+
+.input-wrapper {
+  border: solid 1px var(--color-slate-500);
+  border-radius: 4px;
+  background: var(--color-slate-100);
+}
+
+.input-textfield {
+  border: none;
+  padding: 12px;
+  font-size: 1.15rem;
+  font-weight: var(--font-bold);
+  width: 80%;
+}
