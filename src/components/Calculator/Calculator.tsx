@@ -1,37 +1,54 @@
 import React, { useState } from "react";
 import { InputTextfield } from "../InputTextfield/InputTextfield";
+import { formatToTwoDecimalPlaces } from "../../utils/helper";
 import calculator from "../../assets/images/icon-calculator.svg";
 import "./Calculator.css";
 
 type CalculatorProps = {
-  setMonthlyRepayment: (value: number) => void;
-  setTotalRepayment: (value: number) => void;
+  setMonthlyRepayment: (value: string) => void;
+  setTotalRepayment: (value: string) => void;
 };
 
 export const Calculator = ({
   setMonthlyRepayment,
   setTotalRepayment,
 }: CalculatorProps) => {
-  const [mortgageAmount, setMortgageAmount] = useState<string | number>("");
-  const [mortgageTerm, setMortgageTerm] = useState<string | number>("");
-  const [interestRate, setInterestRate] = useState<string | number>("");
+  const [mortgageAmount, setMortgageAmount] = useState<number | string>("");
+  const [mortgageTerm, setMortgageTerm] = useState<number | string>("");
+  const [interestRate, setInterestRate] = useState<number | string>("");
   const [mortgageType, setMortgageType] = useState("");
+  const [error, setError] = useState(false);
 
-  const monthlyInterestRate = Number(interestRate) / 100 / 12;
+  const formattedInterestRate = interestRate.toString().replace(/,/g, "");
+
+  const monthlyInterestRate = Number(formattedInterestRate) / 100 / 12;
   const calculateMonths = Number(mortgageTerm) * 12;
+
+  const updateRepayments = (monthlyPayments: number) => {
+    const formattedMonthlyPayments = formatToTwoDecimalPlaces(
+      Math.round(monthlyPayments * 100) / 100
+    ).toString();
+
+    const formattedTotalRepayment = formatToTwoDecimalPlaces(
+      Math.round(monthlyPayments * calculateMonths * 100) / 100
+    ).toString();
+
+    setMonthlyRepayment(formattedMonthlyPayments);
+    setTotalRepayment(formattedTotalRepayment);
+  };
 
   const calculateRepayment = () => {
     const monthlyPayments =
       (Number(mortgageAmount) * monthlyInterestRate) /
       (1 - Math.pow(1 + monthlyInterestRate, -calculateMonths));
 
-    setMonthlyRepayment(Math.round(monthlyPayments * 100) / 100);
+    updateRepayments(monthlyPayments);
   };
 
   const calculateInterestOnly = () => {
     const monthlyPayments = Number(mortgageAmount) * monthlyInterestRate;
 
-    setMonthlyRepayment(Math.round(monthlyPayments * 100) / 100);
+    updateRepayments(monthlyPayments);
   };
 
   const calculate = () => {
@@ -42,19 +59,28 @@ export const Calculator = ({
     }
   };
 
-  // total amount is not correct
-  const calculateTotalRepayment = () => {
-    const totalRepayment = Number(mortgageAmount) + Number(interestRate);
-    setTotalRepayment(totalRepayment);
-  };
-
   const clearAll = () => {
     setMortgageAmount("");
     setMortgageTerm("");
     setInterestRate("");
     setMortgageType("");
-    setMonthlyRepayment(0);
-    setTotalRepayment(0);
+    setMonthlyRepayment("0");
+    setTotalRepayment("0");
+    setError(false);
+  };
+
+  const checkInput = () => {
+    if (
+      mortgageAmount === "" ||
+      mortgageTerm === "" ||
+      interestRate === "" ||
+      mortgageType === ""
+    ) {
+      setError(true);
+    } else {
+      setError(false);
+      calculate();
+    }
   };
 
   return (
@@ -69,25 +95,38 @@ export const Calculator = ({
           title="Mortgage Amount"
           value={mortgageAmount}
           setValue={setMortgageAmount}
+          index={0}
+          error={error}
+          setError={setError}
         />
 
         <InputTextfield
           title="Mortgage Term"
           value={mortgageTerm}
           setValue={setMortgageTerm}
+          index={1}
+          error={error}
+          setError={setError}
         />
 
         <InputTextfield
           title="Interest Rate"
           value={interestRate}
           setValue={setInterestRate}
+          index={2}
+          error={error}
+          setError={setError}
         />
 
         <div className="mortgage-type-container">
           <label id="mortgage-type" className="input-title">
             Mortgage Type
           </label>
-          <div className="radio-container">
+          <div
+            className={`radio-container ${
+              mortgageType === "repayment" ? "selected" : ""
+            }`}
+          >
             <input
               type="radio"
               name="mortgage-type"
@@ -97,12 +136,20 @@ export const Calculator = ({
               required
               onChange={(e) => setMortgageType(e.target.value)}
             />
-            <label htmlFor="mortgage-type" className="radio-label">
+            <label
+              htmlFor="mortgage-type"
+              className="radio-label"
+              onClick={() => setMortgageType("repayment")}
+            >
               Repayment
             </label>
           </div>
 
-          <div className="radio-container">
+          <div
+            className={`radio-container ${
+              mortgageType === "interest" ? "selected" : ""
+            }`}
+          >
             <input
               type="radio"
               name="mortgage-type"
@@ -112,20 +159,23 @@ export const Calculator = ({
               required
               onChange={(e) => setMortgageType(e.target.value)}
             />
-            <label htmlFor="interest-type" className="radio-label">
+            <label
+              htmlFor="interest-type"
+              className="radio-label"
+              onClick={() => setMortgageType("interest")}
+            >
               Interest Only
             </label>
           </div>
+          {error && mortgageType === "" ? (
+            <p className="error-text">This field is required</p>
+          ) : (
+            ""
+          )}
         </div>
       </form>
 
-      <button
-        className="calculate-button"
-        onClick={() => {
-          calculate();
-          calculateTotalRepayment();
-        }}
-      >
+      <button className="calculate-button" onClick={checkInput}>
         <img src={calculator} alt="calculator" className="calculator-icon" />
         Calculate Repayments
       </button>

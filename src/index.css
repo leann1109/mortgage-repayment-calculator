@@ -20,5 +20,4 @@ body {
   font-weight: var(--font-medium);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--color-white);
 }

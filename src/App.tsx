@@ -4,8 +4,8 @@ import { Results } from "./components/Results/Results";
 import "./App.css";
 
 export const App = () => {
-  const [monthlyRepayment, setMonthlyRepayment] = useState<number>(0);
-  const [totalRepayment, setTotalRepayment] = useState<number>(0);
+  const [monthlyRepayment, setMonthlyRepayment] = useState<string>("0");
+  const [totalRepayment, setTotalRepayment] = useState<string>("0");
 
   return (
     <div className="App">

@@ -1,17 +1,14 @@
 import React from "react";
 import empty from "../../assets/images/illustration-empty.svg";
+import { formatNumberWithCommas } from "../../utils/helper";
 import "./Results.css";
 
 type ResultsProps = {
-  monthlyRepayment: number;
-  totalRepayment: number;
+  monthlyRepayment: string;
+  totalRepayment: string;
 };
 
 export const Results = ({ monthlyRepayment, totalRepayment }: ResultsProps) => {
-  const formatNumberWithCommas = (number: number) => {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  };
-
   const NoResult = () => {
     return (
       <div className="no-result">
@@ -27,7 +24,7 @@ export const Results = ({ monthlyRepayment, totalRepayment }: ResultsProps) => {
 
   return (
     <section className="results-section">
-      {monthlyRepayment === 0 && totalRepayment === 0 ? (
+      {monthlyRepayment === "0" && totalRepayment === "0" ? (
         <NoResult />
       ) : (
         <>
